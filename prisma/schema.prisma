@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Spp{
+  id_spp Int @id @default(autoincrement())
+  tahun Int
+  nominal Int
+  siswa Siswa[]
+}
+
+model Kelas{
+  id_kelas Int @id @default(autoincrement())
+  nama_kelas String
+  kompetensi_keahlian String
+  siswa Siswa[]
+}
+
+model Petugas{
+  id_petugas Int @id @default(autoincrement())
+  username String 
+  password String
+  nama_petugas String
+  level String
+  pembayaran Pembayaran[]
+}
+
+model Siswa{
+  nisn String @id
+  nis String
+  nama String
+  id_kelas Int 
+  alamat String
+  no_telp String
+  id_spp Int
+  kelas Kelas? @relation(fields: [id_kelas],references: [id_kelas],onDelete: Cascade,onUpdate: Cascade) 
+  spp Spp? @relation(fields: [id_spp],references: [id_spp],onDelete: Cascade,onUpdate: Cascade)
+  pembayaran Pembayaran[]
+}
+
+model Pembayaran{
+  id_pembayaran Int @id @default(autoincrement())
+  id_petugas Int
+  nisn String
+  tgl_bayar DateTime
+  bulan_dibayar String
+  tahun_dibayar String
+  id_spp Int
+  jumlah_dibayar Int
+  petugas Petugas? @relation(fields: [id_petugas],references: [id_petugas],onDelete: Cascade,onUpdate: Cascade)
+  siswa Siswa? @relation(fields: [nisn],references: [nisn],onDelete: Cascade,onUpdate: Cascade)
+}
