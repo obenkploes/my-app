@@ -1,7 +1,7 @@
 import { getKelas } from "@/models/kelas"
+import { NextResponse } from "next/server"
 
-
-export  async function GET(req ,res){
+export  async function GET(){
     const data = await getKelas()
-    return Response.json(data)
-}xu
+    return NextResponse.json(data,{status:200})
+}
